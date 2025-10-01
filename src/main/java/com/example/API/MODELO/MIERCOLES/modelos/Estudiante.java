@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table ( name =  "estudiantes")
@@ -34,8 +35,8 @@ public class Estudiante {
     //CREANDO RELACION DE 1 A MUCHOS
     //1. Para representar MUCHOS elementos de otra tabla debo crear un arreglo(Lista)
     @OneToMany(mappedBy = "estudiante")
-    @JsonBackReference(value="relacionentreestudianteyasistencia")
-    private ArrayList<Asistencia> asistencias;
+    @JsonManagedReference(value="relacionentreestudianteyasistencia")
+    private List<Asistencia> asistencias;
 
     public Estudiante() {
     }
@@ -68,5 +69,21 @@ public class Estudiante {
 
     public void setFechaNacimiento(LocalDate fechaNacimiento) {
         this.fechaNacimiento = fechaNacimiento;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+
+    public List<Asistencia> getAsistencias() {
+        return asistencias;
+    }
+
+    public void setAsistencias(List<Asistencia> asistencias) {
+        this.asistencias = asistencias;
     }
 }

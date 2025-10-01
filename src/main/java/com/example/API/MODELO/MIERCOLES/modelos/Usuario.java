@@ -101,4 +101,12 @@ public class Usuario {
     public void setRol(RolesUsuario rol) {
         this.rol = rol;
     }
+
+    public Estudiante getEstudiante() {
+        return estudiante;
+    }
+
+    public void setEstudiante(Estudiante estudiante) {
+        this.estudiante = estudiante;
+    }
 }
