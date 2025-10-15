@@ -2,8 +2,8 @@ package com.example.API.MODELO.MIERCOLES.servicios;
 
 import com.example.API.MODELO.MIERCOLES.ayudas.MensajeError;
 import com.example.API.MODELO.MIERCOLES.modelos.Usuario;
-import com.example.API.MODELO.MIERCOLES.modelos.dtos.UsuarioDTO;
-import com.example.API.MODELO.MIERCOLES.modelos.mapas.IMapaUsuarioDTO;
+import com.example.API.MODELO.MIERCOLES.dtos.UsuarioDTO;
+import com.example.API.MODELO.MIERCOLES.mapas.IMapaUsuarioDTO;
 import com.example.API.MODELO.MIERCOLES.repositorios.IUsuarioRepositorio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

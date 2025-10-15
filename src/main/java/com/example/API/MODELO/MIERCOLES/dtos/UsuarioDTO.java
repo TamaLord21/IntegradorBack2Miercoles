@@ -1,4 +1,4 @@
-package com.example.API.MODELO.MIERCOLES.modelos.dtos;
+package com.example.API.MODELO.MIERCOLES.dtos;
 
 import com.example.API.MODELO.MIERCOLES.ayudas.RolesUsuario;
 

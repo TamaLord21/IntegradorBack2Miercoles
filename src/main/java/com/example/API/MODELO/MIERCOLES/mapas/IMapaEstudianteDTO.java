@@ -1,7 +1,7 @@
-package com.example.API.MODELO.MIERCOLES.modelos.mapas;
+package com.example.API.MODELO.MIERCOLES.mapas;
 
 import com.example.API.MODELO.MIERCOLES.modelos.Estudiante;
-import com.example.API.MODELO.MIERCOLES.modelos.dtos.EstudianteEspecialDTO;
+import com.example.API.MODELO.MIERCOLES.dtos.EstudianteEspecialDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;

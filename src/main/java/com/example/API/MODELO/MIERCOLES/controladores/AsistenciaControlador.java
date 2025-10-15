@@ -1,0 +1,87 @@
+package com.example.API.MODELO.MIERCOLES.controladores;
+
+import com.example.API.MODELO.MIERCOLES.ayudas.EstadosAsistencia;
+import com.example.API.MODELO.MIERCOLES.dtos.AsistenciaDTO;
+import com.example.API.MODELO.MIERCOLES.modelos.Asistencia;
+import com.example.API.MODELO.MIERCOLES.servicios.AsistenciaServicio;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/asistencias")
+public class AsistenciaControlador {
+
+    @Autowired
+    private AsistenciaServicio servicio;
+
+    @PostMapping("/registrar/{idEstudiante}")
+    public ResponseEntity<?> registrarAsistencia(@RequestBody Asistencia asistencia, @PathVariable Integer idEstudiante) {
+        try {
+            AsistenciaDTO nueva = servicio.guardarAsistencia(asistencia, idEstudiante);
+            return ResponseEntity.status(HttpStatus.CREATED).body(nueva);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/todas")
+    public ResponseEntity<?> listarAsistencias() {
+        try {
+            List<AsistenciaDTO> lista = servicio.buscarTodasLasAsistencias();
+            return ResponseEntity.ok(lista);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> buscarPorId(@PathVariable Integer id) {
+        try {
+            AsistenciaDTO asistencia = servicio.buscarAsistenciaPorId(id);
+            return ResponseEntity.ok(asistencia);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error: " + e.getMessage());
+        }
+    }
+
+    // 🔹 Nuevo endpoint para listar asistencias por estudiante
+    @GetMapping("/estudiante/{idEstudiante}")
+    public ResponseEntity<?> listarAsistenciasPorEstudiante(@PathVariable Integer idEstudiante) {
+        try {
+            List<AsistenciaDTO> asistencias = servicio.listarAsistenciasPorEstudiante(idEstudiante);
+            return ResponseEntity.ok(asistencias);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/grupo/{idGrupo}")
+    public ResponseEntity<?> listarAsistenciasPorGrupoYFecha(
+            @PathVariable Integer idGrupo,
+            @RequestParam("fecha") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha) {
+        try {
+            List<AsistenciaDTO> asistencias = servicio.listarAsistenciasPorGrupoYFecha(idGrupo, fecha);
+            return ResponseEntity.ok(asistencias);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error: " + e.getMessage());
+        }
+    }
+
+    // 🔹 HU08 – Actualizar estado de asistencia
+    @PutMapping("/{id}/estado")
+    public ResponseEntity<AsistenciaDTO> actualizarEstado(
+            @PathVariable int id,
+            @RequestBody EstadosAsistencia nuevoEstado
+    ) throws Exception {
+        AsistenciaDTO dto = AsistenciaServicio.actualizarEstadoAsistencia(id, nuevoEstado);
+        return ResponseEntity.ok(dto);
+    }
+
+
+}
