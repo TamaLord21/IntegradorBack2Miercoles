@@ -2,20 +2,29 @@ package com.example.API.MODELO.MIERCOLES.modelos;
 
 import com.example.API.MODELO.MIERCOLES.ayudas.EstadosAsistencia;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+<<<<<<< HEAD
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import org.springframework.data.repository.cdi.Eager;
+=======
+import jakarta.persistence.*;
+>>>>>>> feature/ramadetrabajo
 
 import java.time.LocalDate;
 
 @Entity
+<<<<<<< HEAD
 @Table(name="asistencias")
+=======
+@Table(name = "asistencias")
+>>>>>>> feature/ramadetrabajo
 public class Asistencia {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+<<<<<<< HEAD
     @Column(name = "fecha", nullable = false, unique = false)
     private LocalDate fecha;
 
@@ -43,6 +52,35 @@ public class Asistencia {
         this.fecha = fecha;
         this.observacion = observacion;
         this.estado = estado;
+=======
+    // Fecha de la asistencia
+    @Column(nullable = false)
+    private LocalDate fecha;
+
+    @Column(nullable = true)
+    private String observacion;
+
+    // Estado de la asistencia resente o ausente
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private EstadosAsistencia estado;
+
+    // Relación con la entidad Estudiante
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "fk_estudiante", referencedColumnName = "id", nullable = false)
+    @JsonBackReference(value = "relacionentreestudianteyasistencia")
+    private Estudiante estudiante;
+
+
+    public Asistencia() {
+    }
+
+    public Asistencia(LocalDate fecha, String observacion, EstadosAsistencia estado, Estudiante estudiante) {
+        this.fecha = fecha;
+        this.observacion = observacion;
+        this.estado = estado;
+        this.estudiante = estudiante;
+>>>>>>> feature/ramadetrabajo
     }
 
     public Integer getId() {
@@ -76,4 +114,18 @@ public class Asistencia {
     public void setEstado(EstadosAsistencia estado) {
         this.estado = estado;
     }
+<<<<<<< HEAD
 }
+=======
+
+    public Estudiante getEstudiante() {
+        return estudiante;
+    }
+
+    public void setEstudiante(Estudiante estudiante) {
+        this.estudiante = estudiante;
+    }
+
+}
+
+>>>>>>> feature/ramadetrabajo
