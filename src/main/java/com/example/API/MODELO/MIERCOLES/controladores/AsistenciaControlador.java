@@ -25,10 +25,24 @@ public class AsistenciaControlador {
         try {
             AsistenciaDTO nueva = servicio.guardarAsistencia(asistencia, idEstudiante);
             return ResponseEntity.status(HttpStatus.CREATED).body(nueva);
+
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error: " + e.getMessage());
+            String mensaje = e.getMessage();
+
+            //error por duplicidad de asistencia
+            if (mensaje != null && mensaje.contains("ya tiene registrada una asistencia")) {
+                return ResponseEntity
+                        .status(HttpStatus.CONFLICT) // Código 409
+                        .body("❌ Error: " + mensaje);
+            }
+
+            //Otros errores generales
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body("⚠️ Error al registrar asistencia: " + mensaje);
         }
     }
+
 
     @GetMapping("/todas")
     public ResponseEntity<?> listarAsistencias() {
@@ -50,7 +64,7 @@ public class AsistenciaControlador {
         }
     }
 
-    // 🔹 Nuevo endpoint para listar asistencias por estudiante
+    //Endpoint para listar asistencias por estudiante
     @GetMapping("/estudiante/{idEstudiante}")
     public ResponseEntity<?> listarAsistenciasPorEstudiante(@PathVariable Integer idEstudiante) {
         try {
@@ -73,15 +87,26 @@ public class AsistenciaControlador {
         }
     }
 
-    // 🔹 HU08 – Actualizar estado de asistencia
+    // Actualizar estado de asistencia
     @PutMapping("/{id}/estado")
     public ResponseEntity<AsistenciaDTO> actualizarEstado(
             @PathVariable int id,
             @RequestBody EstadosAsistencia nuevoEstado
     ) throws Exception {
-        AsistenciaDTO dto = AsistenciaServicio.actualizarEstadoAsistencia(id, nuevoEstado);
+        AsistenciaDTO dto = servicio.actualizarEstadoAsistencia(id, nuevoEstado);
         return ResponseEntity.ok(dto);
     }
 
+    @PostMapping("/registrar/grupal/{idGrupo}")
+    public ResponseEntity<?> registrarAsistenciaGrupal(
+            @RequestBody List<Asistencia> asistencias,
+            @PathVariable Integer idGrupo) {
+        try {
+            List<AsistenciaDTO> nuevas = servicio.guardarAsistenciasGrupales(asistencias, idGrupo);
+            return ResponseEntity.status(HttpStatus.CREATED).body(nuevas);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error: " + e.getMessage());
+        }
+    }
 
 }

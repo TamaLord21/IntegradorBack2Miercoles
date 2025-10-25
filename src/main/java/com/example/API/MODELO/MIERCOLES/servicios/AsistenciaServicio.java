@@ -5,14 +5,17 @@ import com.example.API.MODELO.MIERCOLES.modelos.Asistencia;
 import com.example.API.MODELO.MIERCOLES.modelos.Estudiante;
 import com.example.API.MODELO.MIERCOLES.dtos.AsistenciaDTO;
 import com.example.API.MODELO.MIERCOLES.mapas.IMapaAsistenciaDTO;
+import com.example.API.MODELO.MIERCOLES.modelos.Grupos;
 import com.example.API.MODELO.MIERCOLES.repositorios.IAsistenciaRepositorio;
 import com.example.API.MODELO.MIERCOLES.repositorios.IEstudianteRepositorio;
+import com.example.API.MODELO.MIERCOLES.repositorios.IGruposRepositorio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.example.API.MODELO.MIERCOLES.ayudas.EstadosAsistencia;
 import com.example.API.MODELO.MIERCOLES.ayudas.EstadosAsistencia;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,20 +31,36 @@ public class AsistenciaServicio {
     @Autowired
     private IMapaAsistenciaDTO mapa;
 
+    @Autowired
+    private IGruposRepositorio gruposRepositorio;
+
     // Guardar asistencia
     public AsistenciaDTO guardarAsistencia(Asistencia datosAsistencia, Integer idEstudiante) throws Exception {
         try {
+            //Buscar estudiante
             Optional<Estudiante> estudianteBuscado = estudianteRepositorio.findById(idEstudiante);
 
             if (estudianteBuscado.isEmpty()) {
                 throw new Exception(MensajeError.ERROR_GENERAL_ASISTENCIA.getDescripcion() + " - Estudiante no encontrado");
             }
 
+            // Validar duplicidad Asistencia
+            LocalDate fechaAsistencia = datosAsistencia.getFecha();
+            boolean existeAsistencia = asistenciaRepositorio.existsByEstudiante_IdAndFecha(idEstudiante, fechaAsistencia);
+
+            if (existeAsistencia) {
+                throw new Exception("El estudiante con ID " + idEstudiante + " ya tiene registrada una asistencia en la fecha " + fechaAsistencia);
+            }
+
+            //Asociar estudiante y guardar asistencia
             datosAsistencia.setEstudiante(estudianteBuscado.get());
-            return mapa.convertirADTO(asistenciaRepositorio.save(datosAsistencia));
+            Asistencia asistenciaGuardada = asistenciaRepositorio.save(datosAsistencia);
+
+            //Convertir a DTO y devolver
+            return mapa.convertirADTO(asistenciaGuardada);
 
         } catch (Exception error) {
-            throw new Exception(MensajeError.ERROR_GENERAL_ASISTENCIA.getDescripcion() + error.getMessage());
+            throw new Exception(MensajeError.ERROR_GENERAL_ASISTENCIA.getDescripcion() + " - " + error.getMessage());
         }
     }
 
@@ -106,7 +125,6 @@ public class AsistenciaServicio {
         if (asistenciaOptional.isEmpty()) {
             throw new Exception(" No se encontró la asistencia con ID: " + id);
         }
-
         Asistencia asistencia = asistenciaOptional.get();
 
 
@@ -119,13 +137,49 @@ public class AsistenciaServicio {
         AsistenciaDTO dto = new AsistenciaDTO();
         dto.setFecha(asistenciaActualizada.getFecha());
         dto.setObservacion(asistenciaActualizada.getObservacion());
-        // 🔹 Si quieres incluir el estado en el DTO, agrégalo también:
-        // dto.setEstado(asistenciaActualizada.getEstado().toString());
 
         return dto;
     }
 
+    public List<AsistenciaDTO> guardarAsistenciasGrupales(List<Asistencia> asistencias, Integer idGrupo) {
+        // 1. Verificar que el grupo exista
+        Optional<Grupos> grupoOpt = gruposRepositorio.findById(idGrupo);
+        if (grupoOpt.isEmpty()) {
+            throw new RuntimeException("El grupo no existe");
+        }
+
+        Grupos grupo = grupoOpt.get();
+        List<AsistenciaDTO> resultado = new ArrayList<>();
+
+        for (Asistencia asistencia : asistencias) {
+            Integer idEstudiante = asistencia.getEstudiante().getId();
+            LocalDate fecha = asistencia.getFecha();
+
+            // 2. Validar duplicidad
+            boolean yaExiste = asistenciaRepositorio.existsByEstudiante_IdAndFecha(idEstudiante, fecha);
+            if (yaExiste) {
+                throw new RuntimeException("Ya existe una asistencia para el estudiante ID "
+                        + idEstudiante + " en la fecha " + fecha);
+            }
+
+            // 3. Asociar el grupo a la asistencia
+            asistencia.setGrupo(grupo);
+
+            // 4. Guardar asistencia
+            Asistencia guardada = asistenciaRepositorio.save(asistencia);
+
+            // 5. Agregar al resultado (convertido a DTO)
+            resultado.add(new AsistenciaDTO(
+                    guardada.getFecha(),
+                    guardada.getObservacion(),
+                    guardada.getEstado()
+            ));
+        }
+
+        return resultado;
     }
+
+}
 
 
 

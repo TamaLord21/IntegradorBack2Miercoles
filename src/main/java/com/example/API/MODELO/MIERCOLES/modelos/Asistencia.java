@@ -35,6 +35,12 @@ public class Asistencia {
     @JsonBackReference(value="relacionentreestudianteyasistencia")
     private Estudiante estudiante;
 
+    @ManyToOne
+    @JoinColumn(name = "fk_grupo", referencedColumnName = "id")
+    @JsonBackReference(value = "relacionentregrupoyasistencia")
+    private Grupos grupo;
+
+
     public Asistencia() {
     }
 
@@ -76,4 +82,12 @@ public class Asistencia {
     public void setEstado(EstadosAsistencia estado) {
         this.estado = estado;
     }
+
+    public Estudiante getEstudiante() { return estudiante; }
+
+    public void setEstudiante(Estudiante estudiante) { this.estudiante = estudiante; }
+
+    public Grupos getGrupo() { return grupo; }
+
+    public void setGrupo(Grupos grupo) { this.grupo = grupo; }
 }
