@@ -179,6 +179,11 @@ public class AsistenciaServicio {
         return resultado;
     }
 
+    public List<Grupos> listarGruposDisponibles() {
+        return gruposRepositorio.findAll(); // suponiendo que existe repositorio de grupos
+    }
+
+
 }
 
 

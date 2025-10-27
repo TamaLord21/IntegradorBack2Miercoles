@@ -2,7 +2,9 @@ package com.example.API.MODELO.MIERCOLES.controladores;
 
 import com.example.API.MODELO.MIERCOLES.ayudas.EstadosAsistencia;
 import com.example.API.MODELO.MIERCOLES.dtos.AsistenciaDTO;
+import com.example.API.MODELO.MIERCOLES.dtos.GruposDTO;
 import com.example.API.MODELO.MIERCOLES.modelos.Asistencia;
+import com.example.API.MODELO.MIERCOLES.modelos.Grupos;
 import com.example.API.MODELO.MIERCOLES.servicios.AsistenciaServicio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -109,6 +111,27 @@ public class AsistenciaControlador {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error: " + e.getMessage());
         }
     }
+
+    @GetMapping("/grupos")
+    public ResponseEntity<?> listarGruposDisponibles() {
+        try {
+            List<Grupos> grupos = servicio.listarGruposDisponibles();
+
+            // Mapeamos cada grupo a un DTO limpio
+            List<GruposDTO> gruposDTO = grupos.stream()
+                    .map(g -> new GruposDTO(g.getId(), g.getNombre(), g.getSemestre()))
+                    .toList();
+
+            return ResponseEntity.ok(gruposDTO);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Error al obtener los grupos: " + e.getMessage());
+        }
+    }
+
+
 
 
 
