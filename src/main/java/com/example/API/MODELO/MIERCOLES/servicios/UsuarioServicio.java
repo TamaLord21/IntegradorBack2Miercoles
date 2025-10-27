@@ -81,5 +81,17 @@ public class UsuarioServicio {
         }
     }
 
+    public UsuarioDTO buscarPorCorreoYContrasena(String correo, String contrasena) throws Exception {
+        for (UsuarioDTO usuario : buscarTodosLosUsuarios()) {
+            // Usamos getters en lugar de acceder directamente a los atributos privados
+            if (usuario.getCorreo().equals(correo) && usuario.getContraseña().equals(contrasena)) {
+                return usuario; // devolvemos el DTO directamente
+            }
+        }
+        return null;
+    }
+
+
+
 
 }

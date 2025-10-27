@@ -9,8 +9,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
+@CrossOrigin(origins = "http://localhost:5173")
+
 @RestController
-@RequestMapping("/estudiantes")
+@RequestMapping("/api/estudiantes")
 public class EstudianteControlador {
 
     @Autowired
@@ -43,6 +47,24 @@ public class EstudianteControlador {
                     .body(error.getMessage());
         }
     }
+
+    @GetMapping("/lista")
+    public ResponseEntity<?> obtenerListaEstudiantes() {
+        try {
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(servicio.listarEstudiantesParaAsistencia());
+        } catch (Exception error) {
+            Map<String, Object> respuestaError = new HashMap<>();
+            respuestaError.put("mensaje", "Error al obtener la lista de estudiantes");
+            respuestaError.put("detalle", error.getMessage());
+
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(respuestaError); // ✅ JSON válido
+        }
+    }
+
 
 
 }

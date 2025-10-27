@@ -7,14 +7,16 @@ public class UsuarioDTO {
     private String nombre;
     private String correo;
     private RolesUsuario rol;
+    private String contraseña;
 
     public UsuarioDTO() {
     }
 
-    public UsuarioDTO(String nombre, String correo, RolesUsuario rol) {
+    public UsuarioDTO(String nombre, String correo, RolesUsuario rol, String contraseña) {
         this.nombre = nombre;
         this.correo = correo;
         this.rol = rol;
+        this.contraseña = contraseña;
     }
 
     public String getNombre() {
@@ -39,5 +41,13 @@ public class UsuarioDTO {
 
     public void setRol(RolesUsuario rol) {
         this.rol = rol;
+    }
+
+    public String getContraseña() {
+        return contraseña;
+    }
+
+    public void setContraseña(String contraseña) {
+        this.contraseña = contraseña;
     }
 }

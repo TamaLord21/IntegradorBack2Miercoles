@@ -38,6 +38,11 @@ public class Estudiante {
     @JsonManagedReference(value="relacionentreestudianteyasistencia")
     private List<Asistencia> asistencias;
 
+    @ManyToOne
+    @JoinColumn(name = "id_grupo")
+    @JsonBackReference(value = "relacionentregrupo yestudiante")
+    private Grupos grupo;
+
     public Estudiante() {
     }
 
@@ -86,4 +91,13 @@ public class Estudiante {
     public void setAsistencias(List<Asistencia> asistencias) {
         this.asistencias = asistencias;
     }
+
+    public Grupos getGrupo() {
+        return grupo;
+    }
+
+    public void setGrupo(Grupos grupo) {
+        this.grupo = grupo;
+    }
+
 }

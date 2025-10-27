@@ -1,7 +1,6 @@
 package com.example.API.MODELO.MIERCOLES.dtos;
 
 import com.example.API.MODELO.MIERCOLES.ayudas.EstadosAsistencia;
-
 import java.time.LocalDate;
 
 public class AsistenciaDTO {
@@ -34,12 +33,16 @@ public class AsistenciaDTO {
     public void setObservacion(String observacion) {
         this.observacion = observacion;
     }
+
     public EstadosAsistencia getEstado() {
         return estado;
     }
-    public void  getEstado(EstadosAsistencia estado) {
+
+    public void setEstado(EstadosAsistencia estado) { // ✅ nombre correcto
         this.estado = estado;
     }
 
-    public  LocalDate findByFecha (){ return fecha; }
+    public LocalDate findByFecha() {
+        return fecha;
+    }
 }

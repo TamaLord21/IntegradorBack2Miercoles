@@ -20,7 +20,7 @@ public interface IAsistenciaRepositorio extends JpaRepository<Asistencia,Integer
 
     List<Asistencia> findByEstudiante_Id(Integer IdEstudiante);
 
-    @Query("SELECT a FROM Asistencia a WHERE a.estudiante.grupo.idGrupo = :idGrupo AND a.fecha = :fecha")
+    @Query("SELECT a FROM Asistencia a WHERE a.grupo.id = :idGrupo AND a.fecha = :fecha")
     List<Asistencia> findByGrupoYFecha(@Param("idGrupo") Integer idGrupo, @Param("fecha") LocalDate fecha);
 
     boolean existsByEstudiante_IdAndFecha(Integer idEstudiante, LocalDate fecha);
