@@ -10,13 +10,8 @@ import java.util.List;
 @Repository
 public interface IAsistenciaRepositorio extends JpaRepository<Asistencia, Integer> {
 
-    // Por estudiante (id)
     List<Asistencia> findByEstudianteId(Integer estudianteId);
 
-    // Por grupo (id)
-    List<Asistencia> findByGrupoId(Integer grupoId);
-
-    // Por fecha exacta
     List<Asistencia> findByFecha(LocalDate fecha);
 
 }

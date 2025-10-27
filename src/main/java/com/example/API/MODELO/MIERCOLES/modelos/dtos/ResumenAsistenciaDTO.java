@@ -6,14 +6,18 @@ public class ResumenAsistenciaDTO {
     private Integer totalAusentes;
     private Integer estudianteId;
     private String nombreEstudiante;
+    private Double resultado;
 
-    public ResumenAsistenciaDTO(String mes, Integer totalPresentes, Integer totalAusentes,
-                                Integer estudianteId, String nombreEstudiante) {
+    public ResumenAsistenciaDTO() {
+    }
+
+    public ResumenAsistenciaDTO(String mes, Integer totalPresentes, Integer totalAusentes, Integer estudianteId, String nombreEstudiante, Double resultado) {
         this.mes = mes;
         this.totalPresentes = totalPresentes;
         this.totalAusentes = totalAusentes;
         this.estudianteId = estudianteId;
         this.nombreEstudiante = nombreEstudiante;
+        this.resultado = resultado;
     }
 
     public String getMes() {
@@ -54,5 +58,13 @@ public class ResumenAsistenciaDTO {
 
     public void setNombreEstudiante(String nombreEstudiante) {
         this.nombreEstudiante = nombreEstudiante;
+    }
+
+    public Double getResultado() {
+        return resultado;
+    }
+
+    public void setResultado(Double resultado) {
+        this.resultado = resultado;
     }
 }

@@ -1,10 +1,6 @@
 package com.example.API.MODELO.MIERCOLES.controladores;
-
 import com.example.API.MODELO.MIERCOLES.modelos.Usuario;
-<<<<<<< HEAD
 import com.example.API.MODELO.MIERCOLES.servicios.UsuarioServicio;
-=======
->>>>>>> feature/ramadetrabajo
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,11 +12,7 @@ public class UsuarioControlador {
 
     //Llamar al servicio
     @Autowired
-<<<<<<< HEAD
     UsuarioServicio servicio;
-=======
-    UsuarioControlador servicio;
->>>>>>> feature/ramadetrabajo
 
     //ACTIVAMOS LAS RESPUESTAS AL CLIENTE(PUSSIES DEL FRONT)
 
@@ -30,11 +22,7 @@ public class UsuarioControlador {
         try{
             return ResponseEntity
                     .status(HttpStatus.OK)
-<<<<<<< HEAD
                     .body(servicio.guardarUsuario(datos));
-=======
-                    .body(servicio.operacionGuardado(datos));
->>>>>>> feature/ramadetrabajo
         }catch(Exception error){
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
@@ -48,11 +36,7 @@ public class UsuarioControlador {
         try{
             return ResponseEntity
                     .status(HttpStatus.OK)
-<<<<<<< HEAD
                     .body(servicio.buscarTodosLosUsuarios());
-=======
-                    .body(servicio.operacionBuscarTodos());
->>>>>>> feature/ramadetrabajo
         }catch(Exception error){
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)

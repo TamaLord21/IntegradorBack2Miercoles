@@ -1,27 +1,27 @@
 package com.example.API.MODELO.MIERCOLES.controladores;
 
+import com.example.API.MODELO.MIERCOLES.modelos.Asistencia;
 import com.example.API.MODELO.MIERCOLES.modelos.dtos.AsistenciaDTO;
 import com.example.API.MODELO.MIERCOLES.servicios.AsistenciaServicio;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/asistencias")
 public class AsistenciaControlador {
 
-    private final AsistenciaServicio asistenciaServicio;
+    @Autowired
+    private AsistenciaServicio asistenciaServicio;
 
-    public AsistenciaControlador(AsistenciaServicio asistenciaServicio) {
-        this.asistenciaServicio = asistenciaServicio;
-    }
-
-    @PostMapping("/estudiantes/{estudianteId}/asistencias")
-    public ResponseEntity<AsistenciaDTO> registrar(
-            @PathVariable Integer estudianteId,
-            @RequestBody AsistenciaDTO dto) throws Exception {
-
-        AsistenciaDTO respuesta = asistenciaServicio.registrarAsistencia(estudianteId, dto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(respuesta); // 201
+    @PostMapping
+    public ResponseEntity<?> registrarAsistencia(@RequestBody Asistencia datos) {
+        try {
+            AsistenciaDTO respuesta = asistenciaServicio.registarAsistencia(datos, datos);
+            return ResponseEntity.status(HttpStatus.CREATED).body(respuesta);
+        } catch (Exception error) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error.getMessage());
+        }
     }
 }

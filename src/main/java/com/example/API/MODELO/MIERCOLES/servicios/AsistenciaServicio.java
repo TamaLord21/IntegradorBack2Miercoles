@@ -1,37 +1,11 @@
 package com.example.API.MODELO.MIERCOLES.servicios;
-
+import com.example.API.MODELO.MIERCOLES.ayudas.MensajeError;
 import com.example.API.MODELO.MIERCOLES.modelos.Asistencia;
-<<<<<<< HEAD
+import com.example.API.MODELO.MIERCOLES.modelos.mapas.IMapaAsistenciaDTO;
+import com.example.API.MODELO.MIERCOLES.modelos.mapas.IMapaRegistroAsistenciaDTO;
 import com.example.API.MODELO.MIERCOLES.repositorios.AsistenciaRepositorio;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDate;
-
-@Service
-public class AsistenciaServicio {
-
-    private final AsistenciaRepositorio asistenciaRepositorio;
-
-    public AsistenciaServicio(AsistenciaRepositorio asistenciaRepositorio) {
-        this.asistenciaRepositorio = asistenciaRepositorio;
-    }
-
-    public Asistencia registrarAsistencia(Asistencia asistencia) {
-
-
-        if (asistencia.getFecha() == null) {
-            throw new IllegalArgumentException("La fecha de asistencia no puede estar vacía.");
-        }
-
-        if (asistencia.getFecha().isAfter(LocalDate.now())) {
-            throw new IllegalArgumentException("La fecha de asistencia no puede ser futura.");
-        }
-
-
-        return asistenciaRepositorio.save(asistencia);
-    }
-}
-=======
 import com.example.API.MODELO.MIERCOLES.modelos.Estudiante;
 import com.example.API.MODELO.MIERCOLES.modelos.dtos.AsistenciaDTO;
 import com.example.API.MODELO.MIERCOLES.repositorios.IAsistenciaRepositorio;
@@ -50,20 +24,24 @@ public class AsistenciaServicio {
     private IEstudianteRepositorio estudianteRepo;
 
     @Autowired
-    private ModelMapper modelMapper;
+    IMapaRegistroAsistenciaDTO mapa;
 
-    public AsistenciaDTO registrarAsistencia(Integer estudianteId, AsistenciaDTO dto) throws Exception {
-        Estudiante estudiante = estudianteRepo.findById(estudianteId)
-                .orElseThrow(() -> new Exception("Estudiante no encontrado con id: " + estudianteId));
+    public AsistenciaDTO registarAsistencia(Asistencia datosAsistencia, Asistencia asistencia)throws Exception{
 
-        Asistencia asistencia = modelMapper.map(dto, Asistencia.class);
-        asistencia.setEstudiante(estudiante);
+        try {
+            if (asistencia.getFecha() == null) {
+                throw new IllegalArgumentException("La fecha de asistencia no puede estar vacía.");
+            }
 
-        Asistencia guardada = asistenciaRepo.save(asistencia);
+            if (asistencia.getFecha().isAfter(LocalDate.now())) {
+                throw new IllegalArgumentException("La fecha de asistencia no puede ser futura.");
+            }
 
-        return modelMapper.map(guardada, AsistenciaDTO.class);
+            return  mapa.convertirResgistroAsistenciaDTO(asistenciaRepo.save(datosAsistencia));
+        } catch (Exception error) {
+            throw new Exception(MensajeError.ERROR_GENERAL_USUARIO.getDescripcion() +error.getMessage());
+        }
     }
+
+
 }
-
-
->>>>>>> feature/ramadetrabajo
